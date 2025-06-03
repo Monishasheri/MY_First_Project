@@ -1,0 +1,54 @@
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <label for="emailId">Email:</label>
+            <input
+                type="email"
+                id="emailId"
+                name="emailId"
+                required
+            >
+            <br>
+            <label for="passWord">Password:</label>
+            <input
+                type="password"
+                id="passWord"
+                name="passWord"
+                required
+            >
+            <button type="submit">Login</button>
+        </form>
+        <p id="message"></p>
+        <!-- Include Axios before using it -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                document.getElementById("loginForm").addEventListener("submit", async function (event) {
+                    event.preventDefault();
+        
+                    const emailId = document.getElementById("emailId").value;
+                    const passWord = document.getElementById("passWord").value;
+        
+                    if (!emailId || !passWord) {
+                        document.getElementById("message").innerText = "Please enter email and password.";
+                        return;
+                    }
+        
+                    try {
+                        const response = await axios.post("/login", { emailId, passWord });
+        console.log('response', response)
+                        document.getElementById("message").innerText = response.data.message;
+        if(response.data.status==true){
+
+            window.location.href="/table"
+        }
+                    } catch (error) {
+                        console.error("Login Failed", error);
+                        document.getElementById("message").innerText = "Login failed. Check your credentials.";
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

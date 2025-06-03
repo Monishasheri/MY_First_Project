@@ -1,0 +1,47 @@
+<%- include("./configure/head") %>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h2>OTP VERIFY</h2> 
+    <form id="otpForm">
+        <label for="otp">Enter OTP:</label>
+        <input type="text" id="otp" name="otp" required />
+        <button type="submit">Verify OTP</button>
+    </form>
+    
+    <p id="message"></p>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("otpForm").addEventListener("submit", async function (event) {
+                event.preventDefault();
+    
+                const otp = document.getElementById("otp").value; // ✅ Ensure OTP is correctly retrieved
+    
+                if (!otp) {
+                    document.getElementById("message").innerText = "Please enter OTP.";
+                    return;
+                }
+    
+                try {
+                    const response = await axios.post("/verifyOTP", { otp });
+    
+                    document.getElementById("message").innerText = response.data.message;
+    
+                    if (response.data.message === "Verified Successfully") {
+                        window.location.href = "/login"; // ✅ Redirect on success
+                    }
+                } catch (error) {
+                    console.error("OTP verification failed", error);
+                    document.getElementById("message").innerText = "OTP verification failed. Try again.";
+                }
+            });
+        });
+    </script>
+    </body>
+    </html>
+    
+    
+    

@@ -1,0 +1,80 @@
+<%-include("./configure/head")%>
+
+<body>
+    <h1>Update User</h1>
+    <form id="EditForm">
+        <pre>
+            Email ID   :
+            <input
+                type="text"
+                name="emailId"
+                id="emailId"
+                value="<%= show.emailId %>"
+            >
+            <br>
+            Name :
+            <input
+                type="text"
+                name="name"
+                id="name"
+                value="<%= show.name %>"
+            >
+            <br>
+            Password  :
+            <input
+                type="password"
+                name="passWord"
+                id="passWord"
+                value="<%= show.passWord %>"
+            >
+            <br>
+            Phone No   :
+            <input
+                type="number"
+                name="phoneNo"
+                id="phoneNo"
+                value="<%= show.phoneNo %>"
+            >
+            <br>
+        
+            <input type="submit" value="Submit Form">
+        </pre>
+    </form>
+
+    <!-- Include Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("EditForm");
+
+            form.addEventListener("submit", async function (event) {
+                event.preventDefault(); // Prevent normal form submission
+
+                const formData = {
+                    emailId: document.getElementById("emailId").value,
+                    name: document.getElementById("name").value,
+                    passWord: document.getElementById("passWord").value,
+                    phoneNo: document.getElementById("phoneNo").value,
+                };
+
+                console.log("Form Data:", formData);
+
+                try {
+                    const response = await axios.post("/editForm/<%= show._id %>", formData);
+                    
+                    if (response.data.status === true) {
+                        alert(response.data.message);
+                        window.location.href = "/table"; // Redirect to the table page
+                    } else {
+                        alert("Error: " + response.data.message);
+                    }
+                } catch (error) {
+                    console.error("Error submitting form:", error);
+                    alert("Something went wrong! Please try again.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

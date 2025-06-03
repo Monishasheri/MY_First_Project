@@ -1,0 +1,72 @@
+<%- include("./configure/head") %>
+
+<body>
+    <div class="container">
+        <h2>Register</h2> 
+        <form id="registerForm">
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" name="name" id="name" placeholder="Enter your name" required autocomplete="off" />
+            </div>
+            <div >
+                <label for="emailId">Email:</label>
+                <input type="email" name="emailId" id="emailId" placeholder="Enter your Email" 
+                autocomplete="off"required />
+            </div>
+            <div >
+                <label for="passWord">PassWord:</label>
+                <input type="passWord" name="passWord" id="passWord" placeholder="Enter your Password"autocomplete="off" required />
+            </div>
+            <div >
+                <label for="phoneNo">Phone No:</label>
+                <input type="number" name="phoneNo" id="phoneNo" placeholder="Enter your Phone Number" autocomplete="off"required />
+            </div>
+            <div >
+                <label for="file">Upload Photo:</label>
+                <input type="file" id="file" name="file" required />
+            </div>
+            <button type="submit" class="submit-btn">SUBMIT</button>
+        </form>
+    </div>
+    <p id="message"></p>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("registerForm").addEventListener("submit", async function (event) {
+                event.preventDefault();
+
+                const fileInput = document.getElementById("file");
+                const name = document.getElementById("name").value;
+                const emailId = document.getElementById("emailId").value;
+                const phoneNo = document.getElementById("phoneNo").value;
+                const passWord = document.getElementById("passWord").value;
+
+                console.log(document.getElementById("name")); // Check if it exists
+                console.log(document.getElementById("name")?.value);
+
+                let formData = new FormData();
+                formData.append("name", name);
+                formData.append("emailId", emailId);
+                formData.append("phoneNo", phoneNo);
+                formData.append("passWord", passWord);
+                formData.append("file", fileInput.files[0]); // ✅ Append file
+
+                try {
+                    const response = await axios.post("/register", formData, {
+                        headers: { "Content-Type": "multipart/form-data" }
+                    });
+
+                    document.getElementById("message").innerText = response.data.message;
+                    if (response.data.status) {
+                        window.location.href = "/otp"; // ✅ Redirect to OTP page
+                    }
+                } catch (error) {
+                    console.error("Upload failed", error);
+                    document.getElementById("message").innerText = "Upload failed. Try again.";
+                }
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
+</html>
